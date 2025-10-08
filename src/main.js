@@ -6,9 +6,9 @@ const dafare = document.getElementById("dafare")
 const completato = document.getElementById("completato")
 
 // modello dati
-
 const crea_todo = (contenuto) => {
     return {
+        id:crypto.randomUUID(),         // Genera un id univoco
         contenuto:contenuto,
         completato:false
     }
@@ -31,11 +31,21 @@ todolist.push(todoA)
 todolist.push(todoA)
 todolist.push(todoA)
 
-const aggiornaList = (l,Fr) => {
+const toggleTodo = (todoId) =>{
+    console.log(todoId)
+}
+
+const aggiornaList = (l,fn) => {
     l.innerText = ""
 
-    todolist.filter(Fr).map(x => {
-        l.innerHTML += `<li>${x.contenuto}</li>`                       // `` alt + 096 è uguale al FString del python
+    todolist.filter(fn).map(x => {
+        const li = document.createElement("li")
+        li.innerText = x.contenuto
+        li.onclick = () => toggleTodo(x.id)
+        
+        l.appendChild(li)
+        // `` => (alt + 096) è uguale al FString del python, ${}serve per chiamare la variabile
+        // l.innerHTML += `<li>${x.contenuto}<button data-todo-id="${x.id} class='toggle'">?</button></li>`                       
     })
 }
 
@@ -56,5 +66,7 @@ const RefreshCoseDaFare = () => {
 
     aggiornaList(completato,x => x.completato === true)
 }
-
 RefreshCoseDaFare()
+
+console.log(crypto.randomUUID())
+
