@@ -40,19 +40,19 @@ const aggiornaList = (l,Fr) => {
 }
 
 const RefreshCoseDaFare = () => {
-    dafare.innerText = ""
+    // dafare.innerText = ""
 
-    todolist.filter(x => x.completato === false).map(x => {
-        dafare.innerHTML += `<li>${x.contenuto}</li>`                       // `` alt + 096 è uguale al FString del python
-    })
+    // todolist.filter(x => x.completato === false).map(x => {
+    //     dafare.innerHTML += `<li>${x.contenuto}</li>`                       
+    // })
 
     aggiornaList(dafare,x => x.completato === false)
     
-    completato.innerText = ""
+    // completato.innerText = ""
 
-    todolist.filter(x => x.completato === true).map(x => {
-        completato.innerHTML += `<li>${x.contenuto}</li>`                       // `` alt + 096 è uguale al FString del python
-    })
+    // todolist.filter(x => x.completato === true).map(x => {
+    //     completato.innerHTML += `<li>${x.contenuto}</li>`                       
+    // })
 
     aggiornaList(completato,x => x.completato === true)
 }
