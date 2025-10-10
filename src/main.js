@@ -19,7 +19,7 @@ const crea_todo = (contenuto) => {
 //     completato:false
 // })
 
-//const todolist = JSON.parse(localStorage.getItem("todolist")) || []
+// const todolist = JSON.parse(localStorage.getItem("todolist")) || []
 
 
 
@@ -27,18 +27,30 @@ const todolist = loadFromLocalStorage()
 console.log(todolist)
 
 const todoA = crea_todo("prova")
-todolist.push(todoA)
-todolist.push(todoA)
+todolist.push(crea_todo("prova"))
+todolist.push(crea_todo("prova"))
 todolist.push(todoA)
 
 const toggleTodo = (todoId) =>{
     console.log(todoId)
+    // ciclo sugli elementi e aggiorno
+    for(let i = 0; i < todolist.length; i++){
+        if (todolist[i].id == todoId){
+            todolist[i].completato = !todolist[i].completato
+            console.log(todolist)
+            RefreshCoseDaFare()
+            return 
+        }
+    }
+    // versione funzionale che ha la stessa funzionalità di quella sopra
+    // todolist.filter(x => x.id === todoId).map(x => x.completato = !x.completato)
 }
 
 const aggiornaList = (l,fn) => {
     l.innerText = ""
 
     todolist.filter(fn).map(x => {
+        console.log(x)
         const li = document.createElement("li")
         li.innerText = x.contenuto
         li.onclick = () => toggleTodo(x.id)
