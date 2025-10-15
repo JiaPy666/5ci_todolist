@@ -2,15 +2,47 @@ import "./style.css"
 import {loadFromLocalStorage, saveToLocalStorage} from "./storage"
 
 // riferimnti a porzioni del DOM
-const dafare = document.getElementById("dafare")
-const completato = document.getElementById("completato")
+const backlog = document.getElementById("backlog")
+const inProgress = document.getElementById("inProgress")
+const review = document.getElementById("review")
+const done = document.getElementById("done")
+const newIssue = document.getElementById("newIssue")
+const creaIssue = document.getElementById("creaIssue")
+
+newIssue.addEventListener("click", () => {
+    // Mostra o nasconde il form
+    schemaNascosta.style.display =
+    schemaNascosta.style.display === "none" ? "block" : "none"
+});
+
+creaIssue.addEventListener("click", () => {
+  // Legge i dati del form
+  const issue = {
+    titolo: document.getElementById("titolo").value,
+    descrizione: document.getElementById("descrizione").value,
+    assegnatario: document.getElementById("assegnatario").value,
+    stato: "Backlog"
+  };
+
+  todolist.push(crea_todo(issue))
+ 
+  // Svuota il form e lo nasconde
+  schemaNascosta.style.display = "none"
+  document.getElementById("titolo").value = ""
+  document.getElementById("descrizione").value = ""
+  document.getElementById("assegnatario").value = ""
+  
+  RefreshCoseDaFare()
+});
 
 // modello dati
-const crea_todo = (contenuto) => {
+const crea_todo = (issue) => {
     return {
         id:crypto.randomUUID(),         // Genera un id univoco
-        contenuto:contenuto,
-        completato:false
+        titolo:issue.titolo,
+        descrizione:issue.descrizione,
+        assegnatario:issue.assegnatario,
+        stato:issue.stato
     }
 }
 
@@ -25,11 +57,6 @@ const crea_todo = (contenuto) => {
 
 const todolist = loadFromLocalStorage()
 console.log(todolist)
-
-const todoA = crea_todo("prova")
-todolist.push(crea_todo("prova"))
-todolist.push(crea_todo("prova"))
-todolist.push(todoA)
 
 const toggleTodo = (todoId) =>{
     console.log(todoId)
@@ -49,13 +76,32 @@ const toggleTodo = (todoId) =>{
 const aggiornaList = (l,fn) => {
     l.innerText = ""
 
-    todolist.filter(fn).map(x => {
-        console.log(x)
-        const li = document.createElement("li")
-        li.innerText = x.contenuto
-        li.onclick = () => toggleTodo(x.id)
+    todolist.filter(fn).map(listaFiltrata => {
+        console.log(listaFiltrata);
+
+        const contenutoTodo = document.createElement("div");
+        contenutoTodo.classList.add("task-container"); 
+
+        const proprietaDaStampare = ["titolo", "descrizione", "assegnatario"];
+
+        proprietaDaStampare.forEach(key => {
+            const listItem = document.createElement("li");
+
+            listItem.innerText = listaFiltrata[key];
+
+            contenutoTodo.appendChild(listItem);
+        });
         
-        l.appendChild(li)
+        const cambioStato = document.createElement("button");
+
+        cambioStato.innerText = "Apri Dettagli"; 
+        
+        cambioStato.classList.add("apriModale"); 
+
+        contenutoTodo.appendChild(cambioStato)
+        
+        l.appendChild(contenutoTodo);
+
         // `` => (alt + 096) è uguale al FString del python, ${}serve per chiamare la variabile
         // l.innerHTML += `<li>${x.contenuto}<button data-todo-id="${x.id} class='toggle'">?</button></li>`                       
     })
@@ -68,7 +114,7 @@ const RefreshCoseDaFare = () => {
     //     dafare.innerHTML += `<li>${x.contenuto}</li>`                       
     // })
 
-    aggiornaList(dafare,x => x.completato === false)
+    aggiornaList(backlog,x => x.stato === "Backlog")
     
     // completato.innerText = ""
 
@@ -76,7 +122,11 @@ const RefreshCoseDaFare = () => {
     //     completato.innerHTML += `<li>${x.contenuto}</li>`                       
     // })
 
-    aggiornaList(completato,x => x.completato === true)
+    aggiornaList(inProgress,x => x.completato === "In Progress")
+
+    aggiornaList(review,x => x.completato === "Review")
+
+    aggiornaList(done,x => x.completato === "Done")
 }
 RefreshCoseDaFare()
 

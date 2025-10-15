@@ -8,11 +8,38 @@
   </head>
   <body>
     <h1>Le cose da fare</h1>
-    <form></form>
-    <h2>Cose da Fare</h2>
-    <ul id="dafare"></ul>
-    <h2>Cose Completate</h2>
-    <ul id="completato"></ul>
+
+    <button id="newIssue">Nuovo issue</button>
+    <div id="schemaNascosta">
+      <h3>Nuova issue</h3>
+      <input type="text" id="titolo"> 
+      <input type="text" id="descrizione">
+      <input type="text" id="assegnatario">
+      <button id="creaIssue">Crea</button>
+    </div>
+
+    <h2>Backlog</h2>
+    <ul id="backlog"></ul>
+    <h2>In Progress</h2>
+    <ul id="inProgress"></ul>
+    <h2>Review</h2>
+    <ul id="review"></ul>
+    <h2>Done</h2>
+    <ul id="done"></ul>
+
+    <div id="modalContainer" class="modal-bg">
+      <div id="modal-content">
+        <select id="statoLista">
+          <option value="Backlog">Backlog</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Review">Review</option>
+          <option value="Done">Done</option>
+        </select>
+        <button id="accetta">Si</button>
+        <button id="chiudiFinestra">Chiudi</button>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
