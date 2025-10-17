@@ -6,34 +6,56 @@ const backlog = document.getElementById("backlog")
 const inProgress = document.getElementById("inProgress")
 const review = document.getElementById("review")
 const done = document.getElementById("done")
-const newIssue = document.getElementById("newIssue")
+const formIssue = document.getElementById("formIssue")
 const creaIssue = document.getElementById("creaIssue")
+const modal = document.getElementById("modalContainer");
+const chiudiBottone = document.getElementById("chiudiModale");
+const accetta = document.getElementById("accetta")     
 
-newIssue.addEventListener("click", () => {
+
+formIssue.addEventListener("click", () => {
     // Mostra o nasconde il form
     schemaNascosta.style.display =
     schemaNascosta.style.display === "none" ? "block" : "none"
 });
 
 creaIssue.addEventListener("click", () => {
-  // Legge i dati del form
-  const issue = {
-    titolo: document.getElementById("titolo").value,
-    descrizione: document.getElementById("descrizione").value,
-    assegnatario: document.getElementById("assegnatario").value,
-    stato: "Backlog"
-  };
-
-  todolist.push(crea_todo(issue))
- 
-  // Svuota il form e lo nasconde
-  schemaNascosta.style.display = "none"
-  document.getElementById("titolo").value = ""
-  document.getElementById("descrizione").value = ""
-  document.getElementById("assegnatario").value = ""
-  
-  RefreshCoseDaFare()
+    // Legge i dati del form
+    todolist.push(crea_todo(issue()))
+    svuota()
+    RefreshCoseDaFare()
 });
+
+accetta.addEventListener("click", () => {
+    
+    // ciclo sugli elementi e aggiorno
+    for(let i = 0; i < todolist.length; i++){
+        if (todolist[i].id == todoId){
+            todolist[i].completato = !todolist[i].completato
+            console.log(todolist)
+            RefreshCoseDaFare()
+            return 
+        }
+    }
+})
+
+const issue = () =>{
+    return{
+        titolo:document.getElementById("titolo").value,
+        descrizione:document.getElementById("descrizione").value,
+        assegnatario:document.getElementById("assegnatario").value,
+        stato:document.getElementById("statoLista").value
+    }
+}
+
+const svuota = () =>{
+    // Svuota il form e lo nasconde
+    schemaNascosta.style.display = "none"
+    document.getElementById("titolo").value = ""
+    document.getElementById("descrizione").value = ""
+    document.getElementById("assegnatario").value = ""
+    document.getElementById("statoLista").value = ""
+}
 
 // modello dati
 const crea_todo = (issue) => {
@@ -50,62 +72,58 @@ const crea_todo = (issue) => {
 //     contenuto,
 //     completato:false
 // })
-
 // const todolist = JSON.parse(localStorage.getItem("todolist")) || []
-
 
 
 const todolist = loadFromLocalStorage()
 console.log(todolist)
 
-const toggleTodo = (todoId) =>{
-    console.log(todoId)
-    // ciclo sugli elementi e aggiorno
-    for(let i = 0; i < todolist.length; i++){
-        if (todolist[i].id == todoId){
-            todolist[i].completato = !todolist[i].completato
-            console.log(todolist)
-            RefreshCoseDaFare()
-            return 
-        }
-    }
-    // versione funzionale che ha la stessa funzionalità di quella sopra
-    // todolist.filter(x => x.id === todoId).map(x => x.completato = !x.completato)
-}
+// const toggleTodo = (todoId) =>{
+//     console.log(todoId)
+//     // ciclo sugli elementi e aggiorno
+//     for(let i = 0; i < todolist.length; i++){
+//         if (todolist[i].id == todoId){
+//             todolist[i].completato = !todolist[i].completato
+//             console.log(todolist)
+//             RefreshCoseDaFare()
+//             return 
+//         }
+//     }
+//     // versione funzionale che ha la stessa funzionalità di quella sopra
+//     // todolist.filter(x => x.id === todoId).map(x => x.completato = !x.completato)
+// }
 
 const aggiornaList = (l,fn) => {
     l.innerText = ""
-
     todolist.filter(fn).map(listaFiltrata => {
         console.log(listaFiltrata);
-
         const contenutoTodo = document.createElement("div");
         contenutoTodo.classList.add("task-container"); 
-
         const proprietaDaStampare = ["titolo", "descrizione", "assegnatario"];
-
         proprietaDaStampare.forEach(key => {
             const listItem = document.createElement("li");
-
             listItem.innerText = listaFiltrata[key];
-
             contenutoTodo.appendChild(listItem);
         });
-        
-        const cambioStato = document.createElement("button");
-
-        cambioStato.innerText = "Apri Dettagli"; 
-        
-        cambioStato.classList.add("apriModale"); 
-
+        const cambioStato = document.createElement("button")
+        cambioStato.innerText = "Cambio stato"
+        cambioStato.classList.add("apriModale")
+        cambioStato.addEventListener('click', () => {
+            // Aggiunge la classe 'attiva' per mostrare il modale
+            modal.classList.add('attiva');
+        });
+        // Logica di Chiusura (tramite il bottone 'Chiudi')
+        chiudiBottone.addEventListener('click', () => {
+            // Rimuove la classe 'attiva' per nascondere il modale
+            modal.classList.remove('attiva');
+        });
         contenutoTodo.appendChild(cambioStato)
-        
         l.appendChild(contenutoTodo);
-
         // `` => (alt + 096) è uguale al FString del python, ${}serve per chiamare la variabile
         // l.innerHTML += `<li>${x.contenuto}<button data-todo-id="${x.id} class='toggle'">?</button></li>`                       
     })
 }
+
 
 const RefreshCoseDaFare = () => {
     // dafare.innerText = ""
@@ -114,7 +132,7 @@ const RefreshCoseDaFare = () => {
     //     dafare.innerHTML += `<li>${x.contenuto}</li>`                       
     // })
 
-    aggiornaList(backlog,x => x.stato === "Backlog")
+    aggiornaList(backlog, x => x.stato === "Backlog")
     
     // completato.innerText = ""
 
