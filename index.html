@@ -9,35 +9,58 @@
   <body>
     <h1>Le cose da fare</h1>
 
-    <button id="formIssue">Nuovo issue</button>
-    <div id="schemaNascosta">
-      <h3>Nuova issue</h3>
-      <input type="text" id="titolo"> 
-      <input type="text" id="descrizione">
-      <input type="text" id="assegnatario">
-      <button id="creaIssue">Crea</button>
+    <button id="apriFormModale">Nuovo issue</button> 
+
+    <div id="kanbanBoard">
+      
+      <div>
+        <h2>Backlog</h2>
+        <ul id="backlog" class="todo-list"></ul>
+      </div>
+
+      <div>
+        <h2>In Progress</h2>
+        <ul id="inProgress" class="todo-list"></ul>
+      </div>
+
+      <div>
+        <h2>Review</h2>
+        <ul id="review" class="todo-list"></ul>
+      </div>
+
+      <div>
+        <h2>Done</h2>
+        <ul id="done" class="todo-list"></ul>
+      </div>
+
     </div>
 
-    <h2>Backlog</h2>
-    <ul id="backlog"></ul>
-    <h2>In Progress</h2>
-    <ul id="inProgress"></ul>
-    <h2>Review</h2>
-    <ul id="review"></ul>
-    <h2>Done</h2>
-    <ul id="done"></ul>
 
-    <!-- Finestra per cambio stato -->
+    <div id="formModalContainer" class="modal-bg">
+      <div class="modal-content">
+        <div id="schemaNascosta">
+          <h3>Nuova issue</h3>
+          <input type="text" id="titolo" placeholder="Titolo"> 
+          <input type="text" id="descrizione" placeholder="Descrizione">
+          <input type="text" id="assegnatario" placeholder="Assegnatario">
+          <button id="creaIssue">Crea</button>
+          <button id="annullaCreaIssue">Annulla</button>
+        </div>
+      </div>
+    </div>
+
+
     <div id="modalContainer" class="modal-bg">
-      <div id="modal-content">
-        <select id="statoLista">
+      <div class="modal-content">
+        <h4>Cambia Stato Task</h4>
+        <select id="statoListaModale"> 
           <option value="Backlog">Backlog</option>
           <option value="In Progress">In Progress</option>
           <option value="Review">Review</option>
           <option value="Done">Done</option>
         </select>
-        <button id="accetta">Si</button>
-        <button id="chiudiModale">Chiudi</button>
+        <button id="accetta">Accetta</button>
+        <button id="chiudiModale">Annulla</button>
       </div>
     </div>
 
