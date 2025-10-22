@@ -5,12 +5,12 @@ Una todolist è un gestire di un elenco di cose da fare
 ## User stories
 
 - [x] come utente voglio rendere persistenti di dati salvati
-- come utente voglio che visuallizzi l'elenco delle cosa da fare e delle cose già fatte
-- come utente voglio eliminare un todo
-- come utente voglio creare un todo
-- come utente voglio impostare una scadenza(deadline) per un todo
-- come utente voglio marcare come fatto uno specifico todo
-- come utente voglio filtrare l'elenco delle cose da fare rispetto a una stringa
+- [x] come utente voglio che visuallizzi l'elenco delle cosa da fare e delle cose già fatte
+- [x] come utente voglio eliminare un todo
+- [x] come utente voglio creare un todo
+- [] come utente voglio impostare una scadenza(deadline) per un todo
+- [] come utente voglio marcare come fatto uno specifico todo
+- [] come utente voglio filtrare l'elenco delle cose da fare rispetto a una stringa
 
 # modello dati
 

@@ -23,9 +23,7 @@ const accetta = document.getElementById("accetta")
 let todoIdToUpdate = null;
 
 
-// **********************************************
 // LOGICA FORM MODALE CREAZIONE
-// **********************************************
 apriFormModale.addEventListener("click", () => {
     formModal.classList.add('attiva');
 });
@@ -55,9 +53,7 @@ creaIssue.addEventListener("click", () => {
 });
 
 
-// **********************************************
 // LOGICA MODALE CAMBIO STATO
-// **********************************************
 accetta.addEventListener("click", () => {
     
     // Legge il valore dal select nella modale
@@ -96,14 +92,13 @@ modal.addEventListener('click', (e) => {
 });
 
 
-// **********************************************
 // MODELLO DATI E UTILITY
-// **********************************************
 const issue = () =>{
     return{
         titolo:document.getElementById("titolo").value,
         descrizione:document.getElementById("descrizione").value,
         assegnatario:document.getElementById("assegnatario").value,
+        dataScadenza:document.getElementById("dataScadenza").value,
         stato:"Backlog" // Stato iniziale fisso
     }
 }
@@ -112,6 +107,7 @@ const svuota = () =>{
     document.getElementById("titolo").value = ""
     document.getElementById("descrizione").value = ""
     document.getElementById("assegnatario").value = ""
+    document.getElementById("dataScadenza").value = ""
 }
 
 const crea_todo = (issue) => {
@@ -120,6 +116,7 @@ const crea_todo = (issue) => {
         titolo:issue.titolo,
         descrizione:issue.descrizione,
         assegnatario:issue.assegnatario,
+        dataScadenza:issue.dataScadenza,
         stato:issue.stato
     }
 }
@@ -138,22 +135,20 @@ const eliminaTodo = (todoId) => {
 }
 
 
-// **********************************************
 // FUNZIONE DI VISUALIZZAZIONE
-// **********************************************
 const aggiornaList = (l,fn) => {
     l.innerText = ""
     todolist.filter(fn).map(listaFiltrata => {
         const contenutoTodo = document.createElement("div");
         contenutoTodo.classList.add("task-container"); 
         
-        // Titolo
+        // Titolo del Todo
         const titoloElement = document.createElement("h4");
         titoloElement.innerText = listaFiltrata.titolo;
         contenutoTodo.appendChild(titoloElement);
 
-        // Dettagli (Descrizione, Assegnatario)
-        const proprietaDaStampare = ["descrizione", "assegnatario"];
+        // Contenuto del Todo
+        const proprietaDaStampare = ["descrizione", "assegnatario", "dataScadenza"];
         
         proprietaDaStampare.forEach(key => {
             const listItem = document.createElement("li");
@@ -161,12 +156,12 @@ const aggiornaList = (l,fn) => {
             contenutoTodo.appendChild(listItem);
         });
 
-        // Contenitore per i bottoni (per affiancarli)
+        // Contenitore per i bottoni 
         const buttonContainer = document.createElement("div");
         buttonContainer.classList.add("button-group"); 
 
 
-        // BOTTONE ELIMINA (Nessuna modifica qui)
+        // BOTTONE ELIMINA 
         const eliminaButton = document.createElement("button");
         eliminaButton.innerText = "Elimina 🗑️";
         eliminaButton.classList.add("elimina-btn");
@@ -180,13 +175,9 @@ const aggiornaList = (l,fn) => {
         buttonContainer.appendChild(eliminaButton);
 
 
-        // BOTTONE CAMBIO STATO (MODIFICATO QUI)
+        // BOTTONE CAMBIO STATO 
         const cambioStato = document.createElement("button")
-        
-        // **********************************************
-        // Modifica la riga seguente:
-        cambioStato.innerText = "Sposta"; 
-        // **********************************************
+        cambioStato.innerText = "Sposta";
         
         cambioStato.classList.add("apriModale")
         cambioStato.setAttribute('data-todo-id', listaFiltrata.id);

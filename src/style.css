@@ -14,9 +14,7 @@
     font-size: 0.9em;
 }
 
-/* ------------------------------------------- */
 /* STILE LAYOUT KANBAN BOARD (COLONNE ORIZZONTALI) */
-/* ------------------------------------------- */
 #kanbanBoard {
     display: flex; /* Attiva il layout orizzontale */
     gap: 20px;     /* Spazio tra le colonne */
@@ -54,9 +52,7 @@
 }
 
 
-/* ------------------------------------------- */
 /* STILI BOTTONI E GRUPPI DI BOTTONI */
-/* ------------------------------------------- */
 .button-group {
     display: flex;
     gap: 10px; 
@@ -93,10 +89,7 @@
 }
 
 
-/* ------------------------------------------- */
 /* STILI MODALI (Sfondo e Contenuto) */
-/* ------------------------------------------- */
-
 /* Sfondo Modale (Copre tutto lo schermo) */
 .modal-bg {
     position: fixed; 
