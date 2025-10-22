@@ -12,7 +12,7 @@ Una todolist è un gestire di un elenco di cose da fare
 - come utente voglio marcare come fatto uno specifico todo
 - come utente voglio filtrare l'elenco delle cose da fare rispetto a una stringa
 
-# modello dati
+# Modello dati
 
 todo:
 - contenuto:str
