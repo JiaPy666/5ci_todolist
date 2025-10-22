@@ -22,7 +22,7 @@ todo:
 
 ## Requisiti
 
-### funzionari
+### Funzionari
 
 - rendere persistenti di dati salvati
 - l'elenco delle cosa da fare e delle cose già fatte
@@ -30,7 +30,7 @@ todo:
 - eliminare un todo
 - marcare come fatto uno specifico todo
 
-### non funzionari
+### Non funzionari
 
 - impostazione semplice e di facile utilizzo
 - Server Web (python da riga di comando)
