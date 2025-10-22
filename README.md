@@ -14,10 +14,10 @@ Una todolist è un gestire di un elenco di cose da fare
 
 # Modello dati
 
-todo:
-- contenuto:str
-- scadenza:date (*)
-- completato:bool
+Todo:
+- contenuto: str
+- scadenza: date (*)
+- completato: bool
 
 
 ## Requisiti
