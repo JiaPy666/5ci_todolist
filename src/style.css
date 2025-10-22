@@ -1,11 +1,20 @@
+/* Stile applicato al corpo per cambiare il font su tutta la pagina */
+body {
+    font-family: Arial, Helvetica, sans-serif
+}
+
 /* Stile base delle schede (Task Cards) */
 .task-container {
     background-color: #e6e6fa; /* Lavanda chiaro */
     border: 2px solid #9370db; /* Viola medio */
     padding: 15px;
+    padding-top: 30px; /* Spazio per il countdown in alto a destra */
     margin-bottom: 10px; 
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    
+    /* ESSENZIALE per il posizionamento assoluto del countdown */
+    position: relative; 
 }
 
 .task-container li {
@@ -134,4 +143,65 @@
 /* Mostra la modale quando ha la classe 'attiva' */
 .modal-bg.attiva {
     display: flex; 
+}
+
+
+/* STILI PER IL COUNTDOWN DINAMICO IN ALTO A DESTRA */
+.countdown-top-right {
+    /* POSIZIONAMENTO ASSOLUTO NELL'ANGOLO IN ALTO A DESTRA */
+    position: absolute;
+    top: 5px;   /* Distanza dall'alto */
+    right: 5px; /* Distanza da destra */
+    
+    font-weight: normal;
+    color: #555; 
+    padding: 2px 5px;
+    margin: 0;
+    
+    display: flex;
+    align-items: baseline; /* Allinea G, H, M, S alla base del testo grande */
+    gap: 0; /* Rimuove il gap tra i componenti */
+
+    /* Il font monospaziato è già ereditato dal <body>, ma lo lascio qui per chiarezza del componente */
+}
+
+/* 1. STILE PER I VALORI NUMERICI (PIÙ GRANDI E IN RISALTO) */
+.countdown-value {
+    font-weight: bolder;
+    font-size: 1.5em; /* Ingrandisce solo il valore */
+    color: #2a6fdb; /* Blu */
+    line-height: 1; /* Assicura che la linea non spinga troppo in basso */
+}
+
+/* 2. STILE PER IL CONTESTO (PIÙ PICCOLO E GRIGIO) */
+.countdown-label {
+    font-size: 1em; /* Rimpicciolisce G, H, M, S e i due punti */
+    color: #888; /* Grigio */
+    margin-left: 2px;
+    margin-right: 4px;
+}
+
+/* Stile per il countdown scaduto (evidenziato) */
+.countdown-top-right.expired {
+    color: white;
+    background-color: #dc3545; /* Rosso */
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-weight: bold;
+    font-size: 0.9em; /* Testo "SCADUTO!" più compatto */
+}
+
+/* Assicura che i valori numerici non vengano toccati quando scaduto, tranne per il colore */
+.countdown-top-right.expired .countdown-value,
+.countdown-top-right.expired .countdown-label {
+    color: white !important; 
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* NUOVO: Stile per la card (task-container) quando la scadenza è passata */
+.task-container.expired-task {
+    background-color: #f8d7da; /* Rosso chiaro (Simile a Bootstrap 'danger-light') */
+    border-color: #ff0019; /* Bordo leggermente più scuro per contrasto */
 }
