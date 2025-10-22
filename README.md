@@ -12,17 +12,17 @@ Una todolist è un gestire di un elenco di cose da fare
 - [] come utente voglio marcare come fatto uno specifico todo
 - [] come utente voglio filtrare l'elenco delle cose da fare rispetto a una stringa
 
-# modello dati
+# Modello dati
 
-todo:
-- contenuto:str
-- scadenza:date (*)
-- completato:bool
+Todo:
+- contenuto: str
+- scadenza: date (*)
+- completato: bool
 
 
 ## Requisiti
 
-### funzionari
+### Funzionari
 
 - rendere persistenti di dati salvati
 - l'elenco delle cosa da fare e delle cose già fatte
@@ -30,7 +30,7 @@ todo:
 - eliminare un todo
 - marcare come fatto uno specifico todo
 
-### non funzionari
+### Non funzionari
 
 - impostazione semplice e di facile utilizzo
 - Server Web (python da riga di comando)
