@@ -1,19 +1,16 @@
-/* Stile applicato al corpo per cambiare il font su tutta la pagina */
 body {
     font-family: Arial, Helvetica, sans-serif
 }
 
 /* Stile base delle schede (Task Cards) */
 .task-container {
-    background-color: #e6e6fa; /* Lavanda chiaro */
-    border: 2px solid #9370db; /* Viola medio */
+    background-color: #e6e6fa;
+    border: 2px solid #9370db; 
     padding: 15px;
-    padding-top: 30px; /* Spazio per il countdown in alto a destra */
+    padding-top: 35px;
     margin-bottom: 10px; 
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    
-    /* ESSENZIALE per il posizionamento assoluto del countdown */
     position: relative; 
 }
 
@@ -26,23 +23,19 @@ body {
 /* STILE LAYOUT KANBAN BOARD (COLONNE ORIZZONTALI) */
 #kanbanBoard {
     display: flex; /* Attiva il layout orizzontale */
-    gap: 20px;     /* Spazio tra le colonne */
+    gap: 20px;     
     padding: 10px 0;
     overflow-x: auto; 
 }
 
-/* Stile per ciascuna colonna (il <div> che contiene H2 e UL) */
 #kanbanBoard > div {
     min-width: 280px; 
     max-width: 300px;
     width: 100%;
-    
     background-color: #f4f5f7; 
     border-radius: 6px;
     padding: 10px;
-    
     flex-shrink: 0; 
-    
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -61,7 +54,7 @@ body {
 }
 
 
-/* STILI BOTTONI E GRUPPI DI BOTTONI */
+/* BOTTONI E GRUPPI DI BOTTONI IN BASSO */
 .button-group {
     display: flex;
     gap: 10px; 
@@ -69,28 +62,30 @@ body {
 }
 
 .elimina-btn {
-    background-color: #dc3545; /* Rosso */
+    background-color: #dc3545;
     color: white;
     border: none;
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9em;
+    flex-grow: 1; 
 }
 
 .elimina-btn:hover {
     background-color: #c82333;
 }
 
+/* BOTTONE SPOSTA */
 .apriModale {
-    background-color: #007bff; /* Blu */
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9em;
-    flex-grow: 1; /* Fa espandere il bottone */
+    flex-grow: 1; 
 }
 
 .apriModale:hover {
@@ -114,7 +109,7 @@ body {
     z-index: 1000; 
 }
 
-/* Contenuto della Modale (la finestra piccola) */
+/* Contenuto della Modale */
 .modal-content {
     background: white;
     padding: 20px;
@@ -145,51 +140,93 @@ body {
     display: flex; 
 }
 
-
-/* STILI PER IL COUNTDOWN DINAMICO IN ALTO A DESTRA */
-.countdown-top-right {
-    /* POSIZIONAMENTO ASSOLUTO NELL'ANGOLO IN ALTO A DESTRA */
+/* Contenitore che tiene Modifica (sinistra) e Countdown (destra) */
+.top-actions-container {
     position: absolute;
-    top: 5px;   /* Distanza dall'alto */
-    right: 5px; /* Distanza da destra */
-    
+    top: 5px;
+    left: 5px;
+    width: calc(100% - 10px); 
+    display: flex; 
+    align-items: center;
+    justify-content: space-between; 
+}
+
+/* Stile per il piccolo bottone di modifica in alto a sinistra */
+.top-edit-btn {
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    padding: 5px 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+    line-height: 1; 
+    height: 25px; 
+    width: 25px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-edit-btn:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+
+/* STILI PER IL COUNTDOWN DINAMICO */
+.countdown-top-right {
+    position: static; 
+    top: auto;   
+    right: auto; 
+    padding: 0;
+    margin: 0;
     font-weight: normal;
     color: #555; 
-    padding: 2px 5px;
-    margin: 0;
-    
     display: flex;
-    align-items: baseline; /* Allinea G, H, M, S alla base del testo grande */
-    gap: 0; /* Rimuove il gap tra i componenti */
-
-    /* Il font monospaziato è già ereditato dal <body>, ma lo lascio qui per chiarezza del componente */
+    align-items: baseline; 
+    gap: 0;
 }
 
-/* 1. STILE PER I VALORI NUMERICI (PIÙ GRANDI E IN RISALTO) */
+/* STILE PER I VALORI NUMERICI */
 .countdown-value {
     font-weight: bolder;
-    font-size: 1.5em; /* Ingrandisce solo il valore */
-    color: #2a6fdb; /* Blu */
-    line-height: 1; /* Assicura che la linea non spinga troppo in basso */
+    font-size: 1.5em; 
+    color: #2a6fdb; 
+    line-height: 1; 
 }
 
-/* 2. STILE PER IL CONTESTO (PIÙ PICCOLO E GRIGIO) */
+/* STILE PER IL CONTESTO */
 .countdown-label {
-    font-size: 1em; /* Rimpicciolisce G, H, M, S e i due punti */
-    color: #888; /* Grigio */
+    font-size: 1em;         /* dimensione del contesto del countdown cioè G, H, M, S */
+    color: #888;
     margin-left: 2px;
     margin-right: 4px;
 }
 
-/* Stile per il countdown scaduto (evidenziato) */
+/* Stile per il countdown scaduto */
 .countdown-top-right.expired {
     color: white;
-    background-color: #dc3545; /* Rosso */
+    background-color: #dc3545; 
+    border: 1px solid #dc3545;
     border-radius: 4px;
     padding: 2px 5px;
     font-weight: bold;
-    font-size: 0.9em; /* Testo "SCADUTO!" più compatto */
+    font-size: 0.9em;
 }
+
+/* NUOVO: Stile per lo stato COMPLETATO */
+.countdown-top-right.done-status-badge {
+    color: #c3e6cb;          
+    background-color: #155724; 
+    border: 1px solid #155724;
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-weight: bold;
+    font-size: 0.9em; 
+    display: inline-block; 
+}
+
 
 /* Assicura che i valori numerici non vengano toccati quando scaduto, tranne per il colore */
 .countdown-top-right.expired .countdown-value,
@@ -200,8 +237,36 @@ body {
     margin: 0;
 }
 
-/* NUOVO: Stile per la card (task-container) quando la scadenza è passata */
+/* Stile per la card (task-container) quando la scadenza è passata */
 .task-container.expired-task {
     background-color: #f8d7da; /* Rosso chiaro (Simile a Bootstrap 'danger-light') */
     border-color: #ff0019; /* Bordo leggermente più scuro per contrasto */
+}
+
+/* Stile per la card DONE (Verde chiaro) - PRIORITÀ ASSOLUTA */
+.task-container.done-task {
+    background-color: #d4edda; 
+    border-color: #155724;
+}
+
+.button-newIssue {
+    /* Aspetto circolare */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Rende il bottone perfettamente circolare */
+
+    /* Colori */
+    background-color: #6200EE; /* Viola/Blu scuro simile all'immagine */
+    border: none;
+    
+    /* Posizionamento del contenuto (il segno +) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0; /* Rimuove padding di default */
+    margin-bottom: 20px; /* Spazio sotto al bottone */
+    
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Ombreggiatura per farlo risaltare */
+    transition: background-color 0.2s, box-shadow 0.2s;
 }

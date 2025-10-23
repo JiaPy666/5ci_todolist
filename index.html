@@ -9,7 +9,7 @@
   <body>
     <h1>Le cose da fare</h1>
 
-    <button id="apriFormModale">Nuovo issue</button> 
+    <button id="apriFormModale" class="button-newIssue">+</button> 
 
     <div id="kanbanBoard">
       
@@ -39,12 +39,12 @@
     <div id="formModalContainer" class="modal-bg">
       <div class="modal-content">
         <div id="schemaNascosta">
-          <h3>Nuova issue</h3>
+          <h3 id="titoloModale">Nuova issue</h3>
           <input type="text" id="titolo" placeholder="Titolo"> 
           <input type="text" id="descrizione" placeholder="Descrizione">
           <input type="text" id="assegnatario" placeholder="Assegnatario">
           <input type="date" id="dataScadenza" placeholder="Data Scadenza">
-          <button id="creaIssue">Crea</button>
+          <button id="salvaIssue">Crea</button>
           <button id="annullaCreaIssue">Annulla</button>
         </div>
       </div>

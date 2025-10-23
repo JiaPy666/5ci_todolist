@@ -7,38 +7,75 @@ const inProgress = document.getElementById("inProgress")
 const review = document.getElementById("review")
 const done = document.getElementById("done")
 
-// Riferimenti del FORM ISSUE (Modale di Creazione)
+// Riferimenti del FORM ISSUE
 const apriFormModale = document.getElementById("apriFormModale")
 const formModal = document.getElementById("formModalContainer")
 const annullaCreaIssue = document.getElementById("annullaCreaIssue")
-const creaIssue = document.getElementById("creaIssue")
-const schemaNascosta = document.getElementById("schemaNascosta") // Contenuto del form
+const salvaIssue = document.getElementById("salvaIssue") 
+
+// Riferimento al titolo dinamico della modale
+const titoloModale = document.getElementById("titoloModale") 
+const schemaNascosta = document.getElementById("schemaNascosta") 
 
 // Riferimenti della MODALE CAMBIO STATO
 const modal = document.getElementById("modalContainer");
 const chiudiBottone = document.getElementById("chiudiModale");
 const accetta = document.getElementById("accetta")     
 
-// Variabile per tenere traccia dell'ID del todo da modificare (globale)
+// Variabile per tenere traccia dell'ID del todo da modificare
 let todoIdToUpdate = null;
+// Variabile per indicare la modalità modifica
+let isEditing = false; 
 
-// NUOVA VARIABILE GLOBALE PER I TIMER: Mappa per conservare i riferimenti agli setInterval
+// VARIABILE GLOBALE PER I TIMER
 let activeTimers = {}; 
 
-// LOGICA FORM MODALE CREAZIONE
+// LOGICA FORM MODALE CREAZIONE/MODIFICA
 apriFormModale.addEventListener("click", () => {
+    isEditing = false;
+    todoIdToUpdate = null;
+    svuota(); 
+    titoloModale.innerText = "Nuova issue"; // Imposta il titolo per la creazione
+    salvaIssue.innerText = "Crea"; // Imposta il testo del bottone
     formModal.classList.add('attiva');
 });
 
 annullaCreaIssue.addEventListener("click", () => {
     formModal.classList.remove('attiva');
     svuota(); 
+    isEditing = false; // Reset
 });
 
 
-creaIssue.addEventListener("click", () => {
+// LOGICA: GESTORE CLICK PER CREAZIONE O AGGIORNAMENTO
+salvaIssue.addEventListener("click", () => { 
     // Legge i dati del form
-    todolist.push(crea_todo(issue()))
+    const issueData = issue();
+    
+    if (isEditing && todoIdToUpdate) {
+        // MODALITÀ AGGIORNAMENTO
+        const newTodolist = todolist.map(todo => {
+            if (todo.id === todoIdToUpdate) {
+                return { 
+                    ...todo, 
+                    titolo: issueData.titolo,
+                    descrizione: issueData.descrizione,
+                    assegnatario: issueData.assegnatario,
+                    dataScadenza: issueData.dataScadenza 
+                };
+            }
+            return todo;
+        });
+
+        todolist = newTodolist;
+        isEditing = false; // Esci dalla modalità modifica
+        todoIdToUpdate = null;
+
+    } else {
+        // MODALITÀ CREAZIONE
+        todolist.push(crea_todo(issueData))
+    }
+    
     saveToLocalStorage(todolist) 
     
     // Chiudi la modale del form
@@ -75,7 +112,7 @@ accetta.addEventListener("click", () => {
     }
 });
 
-// Chiusura Modale Cambio Stato (tramite il bottone 'Annulla' dentro il modale)
+// Chiusura Modale Cambio Stato 
 chiudiBottone.addEventListener('click', () => {
     modal.classList.remove('attiva');
 });
@@ -111,6 +148,26 @@ const crea_todo = (issue) => {
     }
 }
 
+// Prepara e apre la modale in modalità modifica
+const openEditModal = (todo) => {
+    isEditing = true;
+    todoIdToUpdate = todo.id;
+    
+    // Popola i campi con i dati esistenti
+    document.getElementById("titolo").value = todo.titolo;
+    document.getElementById("descrizione").value = todo.descrizione;
+    document.getElementById("assegnatario").value = todo.assegnatario;
+    document.getElementById("dataScadenza").value = todo.dataScadenza; 
+    
+    // Aggiorna il titolo e il bottone della modale
+    titoloModale.innerText = "Modifica issue"; 
+    salvaIssue.innerText = "Salva Modifiche";
+    
+    // Apri il modale
+    formModal.classList.add('attiva');
+}
+
+
 // FUNZIONE PER CALCOLARE, FORMATTARE E AGGIORNARE IL COUNTDOWN DINAMICO
 const updateCountdown = (taskId, dataScadenza) => {
     const countdownElement = document.getElementById(`countdown-${taskId}`);
@@ -129,19 +186,18 @@ const updateCountdown = (taskId, dataScadenza) => {
     const distance = fineGiornoScadenza - now;
 
     let countdownText;
-    let isExpired = false; // <<< INIZIALIZZA LA VARIABILE DI STATO SCADUTO
+    let isExpired = false; // INIZIALIZZA LA VARIABILE DI STATO SCADUTO
 
     if (distance < 0) {
         clearInterval(activeTimers[taskId]);
         countdownText = "SCADUTO";
-        isExpired = true; // <<< IMPOSTATO A TRUE QUANDO SCADUTO
+        isExpired = true; // IMPOSTATO A TRUE QUANDO SCADUTO
     } else {
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // MODIFICATO: Aggiunto span con classe 'countdown-label' per il contesto
         countdownText = 
             `<span class="countdown-value">${days}</span><span class="countdown-label">d:</span>` +
             `<span class="countdown-value">${hours}</span><span class="countdown-label">h:</span>` +
@@ -158,25 +214,25 @@ const updateCountdown = (taskId, dataScadenza) => {
         countdownElement.classList.remove('expired');
     }
     
-    return isExpired; // <<< RITORNA LO STATO DI SCADENZA AL CHIAMANTE
+    return isExpired; // RITORNA LO STATO DI SCADENZA AL CHIAMANTE
 }
 
 
 let todolist = loadFromLocalStorage()
 
-// LOGICA DI ELIMINAZIONE
+// ELIMINAZIONE
 const eliminaTodo = (todoId) => {
-    // 1. Ferma il timer associato
+    // Ferma il timer associato
     clearInterval(activeTimers[todoId]);
     delete activeTimers[todoId];
     
-    // 2. Filtra l'array: mantiene solo gli elementi il cui ID NON corrisponde all'ID da eliminare
+    // Filtra l'array: mantiene solo gli elementi il cui ID NON corrisponde all'ID da eliminare
     const newTodolist = todolist.filter(todo => todo.id !== todoId);
     
     todolist = newTodolist;
     saveToLocalStorage(todolist);
     
-    // 3. Ricarica la lista
+    // Ricarica la lista
     RefreshCoseDaFare();
 }
 
@@ -188,51 +244,102 @@ const aggiornaList = (l,fn) => {
         const contenutoTodo = document.createElement("div");
         contenutoTodo.classList.add("task-container"); 
         
-        // =========================================================
-        // AGGIUNGI L'ELEMENTO COUNTDOWN SUBITO ALL'INIZIO (per posizionamento assoluto)
-        // =========================================================
+        // CONTENITORE PER LE AZIONI IN ALTO
+        const topActionsContainer = document.createElement("div");
+        topActionsContainer.classList.add("top-actions-container");
+        
+        
+        // BOTTONE MODIFICA
+        const modificaButton = document.createElement("button");
+        modificaButton.innerText = "✏️";
+        modificaButton.classList.add("top-edit-btn"); 
+        
+        modificaButton.addEventListener('click', () => {
+            openEditModal(listaFiltrata); 
+        });
+        topActionsContainer.appendChild(modificaButton);
+
+
+        // AGGIUNGI L'ELEMENTO COUNTDOWN
         const countdownElement = document.createElement("p");
+
         // Aggiungi un ID unico per poterlo aggiornare con setInterval
         countdownElement.id = `countdown-${listaFiltrata.id}`; 
-        // CLASSE PER POSIZIONAMENTO
         countdownElement.classList.add("countdown-top-right"); 
-        contenutoTodo.appendChild(countdownElement); 
+        topActionsContainer.appendChild(countdownElement); 
         
-        // Avvia il countdown
-        if (listaFiltrata.dataScadenza) {
+        contenutoTodo.appendChild(topActionsContainer); // Appendi il contenitore delle azioni
+
+
+        // GESTIONE CLASSI DI STATO (DONE/EXPIRED)
+        if (listaFiltrata.stato === "Done") {
+            // Colore verde se Done.
+            contenutoTodo.classList.add('done-task');
+            contenutoTodo.classList.remove('expired-task'); // Assicura che la classe scaduta non venga applicata.
             
-            // CONTROLLO INIZIALE E GESTIONE STILE CARD
+            // AGGIUNGI LA NUOVA CLASSE PER LO STILE DEL TESTO "COMPLETATO"
+            countdownElement.classList.add('done-status-badge');
+            countdownElement.innerText = "COMPLETATO";
+            
+            // Rimuovi le classi di formattazione del countdown normale
+            countdownElement.classList.remove('expired'); 
+            
+            // Ferma qualsiasi timer esistente per questo TODO
+            clearInterval(activeTimers[listaFiltrata.id]);
+            delete activeTimers[listaFiltrata.id];
+
+        } else if (listaFiltrata.dataScadenza) {
+            
+            // Rimuovi le classi dello stato Done se presente
+            contenutoTodo.classList.remove('done-task'); 
+            countdownElement.classList.remove('done-status-badge'); // Rimuovi il badge verde
+            
+            // Se non è Done, controlla la scadenza
             const isExpired = updateCountdown(listaFiltrata.id, listaFiltrata.dataScadenza);
             
             if (isExpired) {
-                contenutoTodo.classList.add('expired-task'); // <<< APPLICA CLASSE AL CONTENITORE SE SCADUTO
+                contenutoTodo.classList.add('expired-task'); 
             } else {
-                contenutoTodo.classList.remove('expired-task'); // Rimuovi per sicurezza
+                contenutoTodo.classList.remove('expired-task');
             }
             
             // Avvia l'intervallo (se non è già attivo)
             if (!activeTimers[listaFiltrata.id]) {
                 const timer = setInterval(() => {
+                    // Controlla lo stato all'interno del timer per sicurezza (anche se il Refresh dovrebbe bastare)
+                    if (todolist.find(t => t.id === listaFiltrata.id && t.stato === "Done")) {
+                        // Se è Done, ferma il timer
+                        clearInterval(activeTimers[listaFiltrata.id]);
+                        delete activeTimers[listaFiltrata.id];
+                        return;
+                    }
+
                     const isNowExpired = updateCountdown(listaFiltrata.id, listaFiltrata.dataScadenza);
                     
                     if (isNowExpired) {
-                        contenutoTodo.classList.add('expired-task'); // <<< APPLICA CLASSE AL CONTENITORE SE SCADUTO
+                        contenutoTodo.classList.add('expired-task'); 
                     } else {
                         contenutoTodo.classList.remove('expired-task');
                     }
-                }, 1000); // Aggiorna ogni 1000ms (1 secondo)
+                }, 1000); 
                 
                 activeTimers[listaFiltrata.id] = timer;
             }
         } else {
+            // Caso: Nessuna data e non Done
             countdownElement.innerText = "Data non impostata";
-            countdownElement.style.color = "#ccc"; // Stile discreto
+            countdownElement.style.color = "#ccc"; 
+            contenutoTodo.classList.remove('expired-task');
+            contenutoTodo.classList.remove('done-task'); 
+            countdownElement.classList.remove('done-status-badge');
+            countdownElement.classList.remove('expired');
         }
-        
-        // =========================================================
 
         // Titolo del Todo
         const titoloElement = document.createElement("h4");
+
+        // Piccolo margine per non scontrarsi con il bottone
+        titoloElement.style.marginTop = "15px"; 
         titoloElement.innerText = listaFiltrata.titolo;
         contenutoTodo.appendChild(titoloElement);
 
@@ -245,17 +352,16 @@ const aggiornaList = (l,fn) => {
             contenutoTodo.appendChild(listItem);
         });
 
-        // Contenitore per i bottoni 
+        // Contenitore per i bottoni (Elimina e Sposta in basso)
         const buttonContainer = document.createElement("div");
         buttonContainer.classList.add("button-group"); 
-
 
         // BOTTONE ELIMINA 
         const eliminaButton = document.createElement("button");
         eliminaButton.innerText = "Elimina 🗑️";
         eliminaButton.classList.add("elimina-btn");
         eliminaButton.setAttribute('data-todo-id', listaFiltrata.id);
-        
+
         eliminaButton.addEventListener('click', (e) => {
             const idDaEliminare = e.currentTarget.getAttribute('data-todo-id');
             eliminaTodo(idDaEliminare);
@@ -263,20 +369,17 @@ const aggiornaList = (l,fn) => {
         
         buttonContainer.appendChild(eliminaButton);
 
-
         // BOTTONE CAMBIO STATO 
         const cambioStato = document.createElement("button")
         cambioStato.innerText = "Sposta";
-        
         cambioStato.classList.add("apriModale")
         cambioStato.setAttribute('data-todo-id', listaFiltrata.id);
-
         cambioStato.addEventListener('click', (e) => {
-            // 1. Salva l'ID
+            // Salva l'ID
             todoIdToUpdate = e.currentTarget.getAttribute('data-todo-id');
-            // 2. Imposta lo stato attuale nel modale prima di aprirlo
+            // Imposta lo stato attuale nel modale prima di aprirlo
             document.getElementById("statoListaModale").value = listaFiltrata.stato;
-            // 3. Apri il modale
+            // Apri il modale
             modal.classList.add('attiva');
         });
         
