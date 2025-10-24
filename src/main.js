@@ -1,6 +1,106 @@
 import "./style.css"
 import {loadFromLocalStorage, saveToLocalStorage} from "./storage"
 
+// Riferimenti al Theme Controller
+const themeSwapButton = document.getElementById("themeSwapButton");
+const themeIcon = document.getElementById("themeIcon");
+const body = document.body;
+
+// ----------------------------------------------------
+// LOGICA CONTROLLORE TEMA
+// ----------------------------------------------------
+
+const THEME_STORAGE_KEY = "kanbanTheme";
+const DARK_MODE_CLASS = "dark-mode";
+
+const setIconAndClass = (isDark) => {
+    if (isDark) {
+        body.classList.add(DARK_MODE_CLASS);
+        themeIcon.innerText = "🌙"; // Luna per tema scuro
+    } else {
+        body.classList.remove(DARK_MODE_CLASS);
+        themeIcon.innerText = "☀️"; // Sole per tema chiaro
+    }
+};
+
+const loadTheme = () => {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    // Di default è tema chiaro (savedTheme === null o 'light')
+    const isDark = savedTheme === "dark"; 
+    setIconAndClass(isDark);
+};
+
+// Logica per il cambio tema al click
+themeSwapButton.addEventListener("click", () => {
+    const isCurrentlyDark = body.classList.contains(DARK_MODE_CLASS);
+    const newTheme = isCurrentlyDark ? "light" : "dark";
+
+    localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+    setIconAndClass(newTheme === "dark");
+});
+
+// Carica il tema all'avvio dell'applicazione
+loadTheme();
+// ----------------------------------------------------
+// FINE LOGICA CONTROLLORE TEMA
+// ----------------------------------------------------
+
+
+// ----------------------------------------------------
+// LOGICA DISPLAY DATA CORRENTE
+// ----------------------------------------------------
+
+const dateDisplay = document.getElementById("currentDateDisplay");
+
+// Mappa per tradurre il mese in italiano
+const months = [
+    "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+];
+
+const updateDateDisplay = () => {
+    const today = new Date();
+    const day = today.getDate();
+    const month = months[today.getMonth()];
+    const year = today.getFullYear();
+
+    // Formato "24 Ottobre 2025"
+    dateDisplay.innerText = `${day} ${month} ${year}`;
+};
+
+// Funzione per calcolare il tempo rimanente alla mezzanotte
+const getTimeUntilMidnight = () => {
+    const now = new Date();
+    const midnight = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1, // Il giorno dopo
+        0, 0, 0 // A 00:00:00
+    );
+    return midnight.getTime() - now.getTime();
+};
+
+const setupDailyUpdate = () => {
+    // 1. Aggiorna immediatamente
+    updateDateDisplay();
+
+    // 2. Calcola l'attesa fino alla mezzanotte
+    const delay = getTimeUntilMidnight();
+
+    // 3. Imposta il timer per l'aggiornamento alla mezzanotte
+    setTimeout(() => {
+        // Quando scatta la mezzanotte:
+        updateDateDisplay(); // Aggiorna la data
+        
+        // Imposta immediatamente un intervallo per i giorni successivi (24 ore in millisecondi)
+        setInterval(updateDateDisplay, 24 * 60 * 60 * 1000); 
+
+    }, delay);
+};
+
+setupDailyUpdate();
+
+// FINE LOGICA DISPLAY DATA CORRENTE
 // Riferimenti a porzioni del DOM
 const backlog = document.getElementById("backlog")
 const inProgress = document.getElementById("inProgress")

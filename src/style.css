@@ -2,6 +2,15 @@ body {
     font-family: Arial, Helvetica, sans-serif
 }
 
+.iconaIssue {
+    color: #ffffff
+}
+
+.stileDataCorrente {
+    font-size: 20px;
+    color: #2e2e2e91;
+}
+
 /* Stile base delle schede (Task Cards) */
 .task-container {
     background-color: #e6e6fa;
@@ -20,22 +29,22 @@ body {
     font-size: 0.9em;
 }
 
-/* STILE LAYOUT KANBAN BOARD (COLONNE ORIZZONTALI) */
+/* STILE LAYOUT KANBAN BOARD */
 #kanbanBoard {
-    display: flex; /* Attiva il layout orizzontale */
+    display: flex; 
     gap: 20px;     
     padding: 10px 0;
     overflow-x: auto; 
+    width: 100%; 
 }
 
 #kanbanBoard > div {
-    min-width: 280px; 
-    max-width: 300px;
     width: 100%;
     background-color: #f4f5f7; 
     border-radius: 6px;
     padding: 10px;
     flex-shrink: 0; 
+    flex-grow: 1;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -153,8 +162,6 @@ body {
 
 /* Stile per il piccolo bottone di modifica in alto a sinistra */
 .top-edit-btn {
-    background-color: #007bff; 
-    color: white;
     border: none;
     padding: 5px 5px;
     border-radius: 4px;
@@ -239,11 +246,11 @@ body {
 
 /* Stile per la card (task-container) quando la scadenza è passata */
 .task-container.expired-task {
-    background-color: #f8d7da; /* Rosso chiaro (Simile a Bootstrap 'danger-light') */
-    border-color: #ff0019; /* Bordo leggermente più scuro per contrasto */
+    background-color: #f8d7da; 
+    border-color: #ff0019; 
 }
 
-/* Stile per la card DONE (Verde chiaro) - PRIORITÀ ASSOLUTA */
+/* Stile per la card DONE */
 .task-container.done-task {
     background-color: #d4edda; 
     border-color: #155724;
@@ -251,22 +258,100 @@ body {
 
 .button-newIssue {
     /* Aspetto circolare */
-    width: 50px;
-    height: 50px;
-    border-radius: 50%; /* Rende il bottone perfettamente circolare */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 
     /* Colori */
-    background-color: #6200EE; /* Viola/Blu scuro simile all'immagine */
+    background-color: #6996b4;
     border: none;
     
-    /* Posizionamento del contenuto (il segno +) */
+    /* Posizionamento del contenuto */
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0; /* Rimuove padding di default */
-    margin-bottom: 20px; /* Spazio sotto al bottone */
+    margin-bottom: 20px;
     
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Ombreggiatura per farlo risaltare */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
     transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+/* NUOVI STILI PER IL CONTROLLORE TEMA */
+#themeControllerContainer {
+    position: fixed; /* Fissa in alto */
+    top: 20px;
+    right: 20px;
+    z-index: 1001; 
+}
+
+#themeSwapButton {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+#themeSwapButton:hover {
+    background-color: #e0e0e0;
+}
+
+/* STILI TEMA SCURO (DARK MODE) */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+/* Stile per i container della Kanban Board in Dark Mode */
+body.dark-mode #kanbanBoard > div {
+    background-color: #2c2c2c;
+    box-shadow: 1px 1px 5px rgba(255, 255, 255, 0.1);
+}
+
+/* Stile per le Task Cards in Dark Mode */
+body.dark-mode .task-container {
+    background-color: #383838; 
+    border: 2px solid #a370db; 
+    color: #e0e0e0;
+}
+
+/* Task DONE in Dark Mode */
+body.dark-mode .task-container.done-task {
+    background-color: #0b2e13; /* Verde più scuro */
+    border-color: #6c757d;
+}
+
+/* Task EXPIRED in Dark Mode */
+body.dark-mode .task-container.expired-task {
+    background-color: #490008; 
+    border-color: #ff5566;
+}
+
+/* Colore del bottone Aggiungi Issue in Dark Mode */
+body.dark-mode .button-newIssue {
+    background-color: #ffffff; 
+}
+
+/* Colore per i testi principali in Dark Mode */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h4 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .iconaIssue {
+    color: #000000
+}
+
+body.dark-mode .stileDataCorrente {
+    color: #9c9c9c
 }
