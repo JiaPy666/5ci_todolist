@@ -6,10 +6,6 @@ const themeSwapButton = document.getElementById("themeSwapButton");
 const themeIcon = document.getElementById("themeIcon");
 const body = document.body;
 
-// ----------------------------------------------------
-// LOGICA CONTROLLORE TEMA
-// ----------------------------------------------------
-
 const THEME_STORAGE_KEY = "kanbanTheme";
 const DARK_MODE_CLASS = "dark-mode";
 
@@ -41,14 +37,6 @@ themeSwapButton.addEventListener("click", () => {
 
 // Carica il tema all'avvio dell'applicazione
 loadTheme();
-// ----------------------------------------------------
-// FINE LOGICA CONTROLLORE TEMA
-// ----------------------------------------------------
-
-
-// ----------------------------------------------------
-// LOGICA DISPLAY DATA CORRENTE
-// ----------------------------------------------------
 
 const dateDisplay = document.getElementById("currentDateDisplay");
 
@@ -81,18 +69,10 @@ const getTimeUntilMidnight = () => {
 };
 
 const setupDailyUpdate = () => {
-    // 1. Aggiorna immediatamente
     updateDateDisplay();
-
-    // 2. Calcola l'attesa fino alla mezzanotte
     const delay = getTimeUntilMidnight();
-
-    // 3. Imposta il timer per l'aggiornamento alla mezzanotte
     setTimeout(() => {
-        // Quando scatta la mezzanotte:
-        updateDateDisplay(); // Aggiorna la data
-        
-        // Imposta immediatamente un intervallo per i giorni successivi (24 ore in millisecondi)
+        updateDateDisplay(); 
         setInterval(updateDateDisplay, 24 * 60 * 60 * 1000); 
 
     }, delay);
